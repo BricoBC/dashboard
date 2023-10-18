@@ -1,4 +1,5 @@
 import modulo_information as m_info
+import graphics as fig
 
 if __name__ == "__main__":
     import pandas as pd
@@ -23,7 +24,6 @@ if __name__ == "__main__":
     print(categories)
 
     category = categories[1]
-    arr_datos, arr_without_data, arr_with_data = 0,0,0
 
     #GET CATEGORIA
     dashboard['Categoria'] = category
@@ -36,19 +36,15 @@ if __name__ == "__main__":
     arr_sin_datos = []
     arr_con_datos = []
     for j in range(theme.size):
-        arr_total_datos.append(m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )[0])
+            # Cómo se tiene el tema de una categoria se empieza a coleccionar en un arreglo los
+            # datos totales, datos con información y datos sin información de cada tema.
+            # Tiene su propio array cada dato obtenido.
+            all_data = m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )
 
-        i = m_info.get_i('Sí', m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )[1])
-        # Operación ternaria donde si nos devuelve un True es porque no existe esa palabra por ende el valor es 0, 
-        # en caso de que devuelva la iteral esa la usamos para el array de m_info.every_data
-
-        value = 0 if i == -1 else m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )[2][i]
-        arr_con_datos.append(value)
-
-        i = m_info.get_i('No', m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )[1])
-        value = 0 if i == -1 else m_info.every_data(df_data, 'CATEGORIA', category, 'TEMA', theme[j], '¿Se tiene?' )[2][i]
-        arr_sin_datos.append(value)
-        print()
+            arr_total_datos.append(all_data[0])
+            arr_con_datos.append(all_data[2])
+            arr_sin_datos.append(all_data[1])
+        
     dashboard['Datos'] = arr_total_datos
     dashboard['Datos_con_informacion'] = arr_con_datos
     dashboard['Datos_sin_informacion'] = arr_sin_datos
@@ -58,6 +54,11 @@ if __name__ == "__main__":
     dashboard['Source_information'] = m_info.filter_column(df_data,'CATEGORIA', category, 'ORIGEN')
 
     print(dashboard)
+
+    print("Creando las imagenes")
+    fig.bar_pie(dashboard)
+    print(f"Se termino de crear las imagenes de {dashboard['Categoria']}")
+
 
     
 
