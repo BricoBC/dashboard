@@ -10,7 +10,7 @@ def filter_column(data, column_of_value, value, column_filter):
     COLUMN_OF_VALUE es únicamente el nombre la columna.
     COLUMN_FILTER es únicamente el nombre la columna.
     """
-    arr_tema = data[ data[column_of_value] == value][column_filter].unique()
+    arr_tema = data[ data[column_of_value] == value][column_filter].dropna().unique()
     return arr_tema
 
 def every_data(data, name_column_category , category, name_column_tema, tema, name_column_values):
