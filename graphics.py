@@ -109,6 +109,10 @@ def show_topic(dashboard):
     return txt
 
 def nested_pie_charts(dashboard):
+    """
+    Función que exporta una grafica de pastel anidada para las columnas de los temas de una categoria en especifico.
+    Se necesita las columnas de: Tema, Datos con información y sin información.
+    """
     title = dashboard['Categoria']
 
     fig, ax = plt.subplots()
