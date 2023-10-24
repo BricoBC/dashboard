@@ -95,3 +95,49 @@ def bar_pie(dashboard):
 
 
         plt.savefig(f'./images/Pastel-barras-{title}_{labels[i]}.png')
+
+
+# -----------------------------------Barras de pasteles combinadas
+def show_topic(dashboard):
+    """
+    Ésta función no puede ser optimizada.
+    Hace que se muestre los temas de una categoria especifica.
+    """
+    global j
+    j=j+1
+    txt = dashboard['Tema'][j]
+    return txt
+
+def nested_pie_charts(dashboard):
+    title = dashboard['Categoria']
+
+    fig, ax = plt.subplots()
+
+    size = 0.3
+    vals = [ [dashboard['Datos_con_informacion'][i], dashboard['Datos_sin_informacion'][i]] for i in range(len(dashboard['Datos_sin_informacion']))]
+
+    vals = np.array(vals)
+
+    cmap = plt.colormaps["tab20c"]
+    #Extraigo la posicion 0 de cada tono de color
+    outer_colors = cmap(np.arange(5)*len(dashboard['Tema']))
+    global j
+    j=-1
+    ax.pie(dashboard['Datos'], radius=1, colors=outer_colors, 
+        autopct = lambda x: show_topic() ,
+        pctdistance= 1.1,
+        wedgeprops=dict(width=size, edgecolor='w'))
+
+    #Extraigo la posicion 1 y 3 de cada color
+    arr_color = [(i, i+2) for i in range(1, 5*len(dashboard['Tema']), 4)]
+    arr_color= np.array(arr_color)
+    inner_colors = cmap(arr_color.flatten())
+
+    ax.pie(vals.flatten(), #Método que de 2 o 3 dimensiones te lo convierte a una dimensión, 
+        radius=1-size, colors=inner_colors, 
+        autopct=lambda x: f'{x:.0f}%' if x != 0 else '' ,
+        wedgeprops=dict(width=size, edgecolor='w'))
+
+
+    ax.set(aspect="equal", title=title)
+    plt.savefig(f'./images/Pasteles-{title}.png')
